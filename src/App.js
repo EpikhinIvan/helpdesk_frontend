@@ -4,9 +4,7 @@ import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import RequestsPage from './pages/RequestsPage/RequestsPage';
-
-
-
+import AddRequestPage from './pages/AddRequestPage/AddRequestPage';
 
 const App = () => {
   return (
@@ -17,6 +15,7 @@ const App = () => {
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/requests" element={<RequestsPage/>} />
+            <Route path="/add-request" element={<AddRequestPage/>} />
           </Routes>
         </div>
       </Router>

@@ -6,6 +6,7 @@ import './LoginForm.css';
 const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate(); 
 
     const handleChange = (event) => {
@@ -19,29 +20,35 @@ const LoginForm = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
         try {
             const res = await axios.post('http://localhost:8000/api/login/', { username, password });
-            console.log(res.data);
-
+            
             localStorage.setItem('token', res.data.token);
-            localStorage.setItem('username', username)
-            console.log(res.response)
-            console.log(res.status);
-
+            localStorage.setItem('username', username);
+            localStorage.setItem('userId', res.data.userId); 
+            console.log(res);
+            console.log(res.data);
+    
+            setUsername('');
+            setPassword('');
             navigate('/'); 
-
+    
         } catch (err) {
-            console.error(err.response.data);
+            if (err.response) {
+                setError(err.response.data.error || "Произошла ошибка при входе в систему.");
+            } else {
+                setError("Сетевая ошибка. Попробуйте еще раз.");
+            }
+            console.error('Ошибка при входе:', err.response || err);
         }
-
-        setUsername('');
-        setPassword('');
     };
 
     return (
         <div className="form-container"> 
             <h2 className='form-h2'>Вход</h2>
+
+            {error && <div className="alert alert-danger">{error}</div>} {/* Отображаем ошибки здесь */}
 
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
