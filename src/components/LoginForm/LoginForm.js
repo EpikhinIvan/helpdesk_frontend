@@ -26,10 +26,10 @@ const LoginForm = () => {
 
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('username', username)
-
+            console.log(res.response)
             console.log(res.status);
 
-            navigate('/home'); 
+            navigate('/'); 
 
         } catch (err) {
             console.error(err.response.data);
