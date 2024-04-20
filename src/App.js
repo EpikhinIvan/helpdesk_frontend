@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import RequestsPage from './pages/RequestsPage/RequestsPage';
 import AddRequestPage from './pages/AddRequestPage/AddRequestPage';
+import MyRequestsPage from './pages/MyRequestsPage/MyRequestsPage';
 
 const ProtectedRoute = ({ children }) => {
   const isHelpDeskUser = localStorage.getItem('isHelpDeskUser') === 'true';
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/requests" element={<RequestsPage/>} />
+          <Route path="/my-requests" element={<MyRequestsPage/>} />
           <Route path="/add-request" element={
             <ProtectedRoute>
               <AddRequestPage/>
