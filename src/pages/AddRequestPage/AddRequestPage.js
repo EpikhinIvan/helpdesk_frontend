@@ -37,7 +37,7 @@ function AddRequestPage() {
             body: JSON.stringify({
               auditorium_number: auditoriumNumber,
               description: description,
-              creator: userId, // Добавляем username как creator
+              creator: userId, 
             }),
           });
       
