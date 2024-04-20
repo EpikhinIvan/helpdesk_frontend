@@ -1,82 +1,78 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './RegisterForm.css';
 
-class RegisterForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            full_name: ''
-        };
-    }
+const RegisterForm = () => {
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+        full_name: ''
+    });
 
-    handleChange = (event) => {
-        this.setState({
+    const navigate = useNavigate();
+
+    const handleChange = (event) => {
+        setFormData({
+            ...formData,
             [event.target.name]: event.target.value
         });
     };
 
-    handleSubmit = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-    
-        const { username, password, full_name } = this.state;
-    
+
         try {
-            const userData = {
+            const res = await axios.post('http://localhost:8000/api/register/', {
                 user: {
-                    username: username,
-                    password: password
+                    username: formData.username,
+                    password: formData.password
                 },
-                full_name: full_name
-            };
-    
-            const res = await axios.post('http://localhost:8000/api/register/', userData);
+                full_name: formData.full_name
+            });
             console.log(res.data);
+
+            // Перенаправление на другую страницу после успешной регистрации
+            navigate('/login');
         } catch (err) {
             console.error(err.response.data);
         }
-    
-        this.setState({
+
+        setFormData({
             username: '',
             password: '',
             full_name: ''
         });
     };
 
-    render() {
-        const { username, password, full_name } = this.state;
+    const { username, password, full_name } = formData;
 
-        return (
-            <div className="form-container"> 
-                <h2 className='form-h2'>Регистрация</h2>
+    return (
+        <div className="form-container"> 
+            <h2 className='form-h2'>Регистрация</h2>
 
-                <form onSubmit={this.handleSubmit}>
+            <form onSubmit={handleSubmit}>
+                <div className="form-group"> 
+                    <label>Полное Имя:</label>
+                    <input type="text" name="full_name" value={full_name} onChange={handleChange} className="form-control" />
+                </div>
 
-                    <div className="form-group"> 
-                        <label>Полное Имя:</label>
-                        <input type="text" name="full_name" value={full_name} onChange={this.handleChange} className="form-control" />
-                    </div>
+                <div className="form-group">
+                    <label>Логин:</label>
+                    <input type="text" name="username" value={username} onChange={handleChange} className="form-control" />
+                </div>
 
-                    <div className="form-group">
-                        <label>Логин:</label>
-                        <input type="text" name="username" value={username} onChange={this.handleChange} className="form-control" />
-                    </div>
+                <div className="form-group"> 
+                    <label>Пароль:</label>
+                    <input type="password" name="password" value={password} onChange={handleChange} className="form-control" />
+                </div>
 
-                    <div className="form-group"> 
-                        <label>Пароль:</label>
-                        <input type="password" name="password" value={password} onChange={this.handleChange} className="form-control" />
-                    </div>
-
-                    
-                    <div className='btn-box'>
-                        <button type="submit" className="btn">Зарегистрироваться</button> 
-                    </div>
-                </form>
-            </div>
-        );
-    }
-}
+                <div className='btn-box'>
+                    <button type="submit" className="btn">Зарегистрироваться</button> 
+                </div>
+            </form>
+        </div>
+    );
+};
 
 export default RegisterForm;
