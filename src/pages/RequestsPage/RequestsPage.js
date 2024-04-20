@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const RequestsPage = () => {
     const [requests, setRequests] = useState([]);
@@ -65,7 +64,10 @@ const RequestsPage = () => {
                             <th scope="col">№</th>
                             <th scope="col">Аудитория</th>
                             <th scope="col">Преподаватель/Сотрудник</th>
+                            <th scope="col">Описание</th>
+
                             <th scope="col">HelpDesk сотрудник</th>
+
                             <th scope="col">Создана</th>
                             <th scope="col">Статус</th>
                         </tr>
@@ -76,6 +78,8 @@ const RequestsPage = () => {
                                 <td>{index + 1}</td>
                                 <td>{request.auditorium_number}</td>
                                 <td>{request.creator}</td>
+                                <td>{request.description}</td>
+
                                 <td>{request.handler}</td>
                                 <td>{request.created_at}</td>
                                 <td>{request.status === 'NEW' ? 'Новый' : 

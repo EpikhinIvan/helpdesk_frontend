@@ -28,6 +28,7 @@ const LoginForm = () => {
             localStorage.setItem('username', username);
             localStorage.setItem('userId', res.data.userId); 
             localStorage.setItem('isHelpDeskUser', res.data.helpdeskUser);
+            console.log(res.data)
     
             setUsername('');
             setPassword('');
