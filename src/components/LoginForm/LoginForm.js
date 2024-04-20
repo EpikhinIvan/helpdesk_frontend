@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom'; 
 import './LoginForm.css';
 
 const LoginForm = () => {
@@ -48,7 +48,7 @@ const LoginForm = () => {
         <div className="form-container"> 
             <h2 className='form-h2'>Вход</h2>
 
-            {error && <div className="alert alert-danger">{error}</div>} {/* Отображаем ошибки здесь */}
+            {error && <div className="alert alert-danger">{error}</div>}
 
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -61,9 +61,14 @@ const LoginForm = () => {
                     <input type="password" name="password" value={password} onChange={handleChange} className="form-control" />
                 </div>
 
-                <div className='btn-box'>
-                    <button type="submit" className="btn">Войти</button> 
+                <div className='buttonbox'>
+                    <div className='btn-box'>
+                        <button type="submit" className="btn">Войти</button> 
+                    </div>
+
+                    <p ><Link to="/register">У вас нет аккаунта?</Link></p>
                 </div>
+                
             </form>
         </div>
     );

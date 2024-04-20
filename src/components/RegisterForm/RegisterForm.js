@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; 
 import './RegisterForm.css';
 
 const RegisterForm = () => {
@@ -32,7 +32,7 @@ const RegisterForm = () => {
             });
             console.log(res.data);
 
-            // Перенаправление на другую страницу после успешной регистрации
+          
             navigate('/login');
         } catch (err) {
             console.error(err.response.data);
@@ -52,10 +52,6 @@ const RegisterForm = () => {
             <h2 className='form-h2'>Регистрация</h2>
 
             <form onSubmit={handleSubmit}>
-                <div className="form-group"> 
-                    <label>Полное Имя:</label>
-                    <input type="text" name="full_name" value={full_name} onChange={handleChange} className="form-control" />
-                </div>
 
                 <div className="form-group">
                     <label>Логин:</label>
@@ -63,12 +59,22 @@ const RegisterForm = () => {
                 </div>
 
                 <div className="form-group"> 
+                    <label>Полное Имя:</label>
+                    <input type="text" name="full_name" value={full_name} onChange={handleChange} className="form-control" />
+                </div>
+
+             
+                <div className="form-group"> 
                     <label>Пароль:</label>
                     <input type="password" name="password" value={password} onChange={handleChange} className="form-control" />
                 </div>
 
-                <div className='btn-box'>
-                    <button type="submit" className="btn">Зарегистрироваться</button> 
+                <div className='buttonbox'>
+                    <div className='btn-box'>
+                        <button type="submit" className="btn">Зарегистрироваться</button> 
+                    </div>
+
+                    <p ><Link to="/login">У вас есть аккаунт?</Link></p>
                 </div>
             </form>
         </div>
