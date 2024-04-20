@@ -2,7 +2,7 @@
     import { Link, useNavigate } from 'react-router-dom';
 
     const HomePage = () => {
-        const [username, setUsername] = useState(localStorage.getItem('username'));
+        const username = localStorage.getItem('username');
 
         const isHelpDeskUser = localStorage.getItem('isHelpDeskUser') === 'true';
 
@@ -23,17 +23,17 @@
                             {isAuthenticated ? (
                                 <>
                                     <p>Добро пожаловать, {username}!</p>
-                                    <button className="btn btn-primary mb-3" onClick={exitAcc}>Выйти</button>
                                     <div className="d-grid gap-2">
                                         
                                         {isHelpDeskUser? (
                                             <div className="d-grid gap-2">
-                                                <Link to="/requests" className="btn btn-secondary mb-2">Все заявки</Link>
-                                                <Link to="/my-requests" className="btn btn-secondary mb-2">Мои заявки</Link>
                                                 <Link to="/newrequests" className="btn btn-secondary mb-2">Новые заявки</Link>
+                                                <Link to="/my-requests" className="btn btn-secondary mb-2">Мои заявки</Link>
+                                                <Link to="/requests" className="btn btn-secondary mb-2">Все заявки</Link>
                                             </div>
 
                                         ): (<Link to="/add-request" className="btn btn-secondary">Добавить заявку</Link>)}
+                                        <button className="btn btn-primary mb-3" onClick={exitAcc}>Выйти</button>
                                     </div>
                                 </>
                             ) : (

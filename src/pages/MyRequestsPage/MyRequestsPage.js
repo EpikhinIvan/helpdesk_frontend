@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const NewRequestsPage = () => {
+const MyRequestsPage = () => {
     const [requests, setRequests] = useState([]);
+    const helpdeskUsernameFromStorage = localStorage.getItem('helpdeskUsername');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,13 +19,9 @@ const NewRequestsPage = () => {
         fetchData();
     }, []); 
 
-    const filteredRequests = requests.filter(request => request.status === 'NEW')
-
     return (
         <div className='container py-4'>
-            <h2 className="mb-4">Новые заявки</h2>
-            <div className="row mb-3">
-            </div>
+            <h2 className="mb-4">Мои Заявки</h2>
 
             <div className="table-responsive">
                 <table className="table table-striped table-bordered">
@@ -32,22 +30,33 @@ const NewRequestsPage = () => {
                             <th scope="col">№</th>
                             <th scope="col">Аудитория</th>
                             <th scope="col">Преподаватель/Сотрудник</th>
-                            <th scope="col">Описание</th>
                             <th scope="col">HelpDesk сотрудник</th>
                             <th scope="col">Создана</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredRequests.map((request, index) => (
+                    {
+                        requests.filter(request => 
+                            request.status === 'IN_PROCESS' && request.handler === helpdeskUsernameFromStorage
+                        ).length > 0 ? (
+                            requests.filter(request => 
+                            request.status === 'IN_PROCESS' && request.handler === helpdeskUsernameFromStorage
+                            ).map((request, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{request.auditorium_number}</td>
                                 <td>{request.creator}</td>
-                                <td>{request.description}</td>
                                 <td>{request.handler}</td>
-                                <td>{request.created_at}</td>
+                                <td>{new Date(request.created_at).toLocaleString()}</td>
                             </tr>
-                        ))}
+                            ))
+                        ) : (
+                            // Сообщение, если заявок нет
+                            <tr>
+                            <td colSpan="6" className="text-center">Заявок в процессе обработки нет или они не назначены на вас</td>
+                            </tr>
+                        )
+                    }
                     </tbody>
                 </table>
             </div>
@@ -55,4 +64,4 @@ const NewRequestsPage = () => {
     );
 };
 
-export default NewRequestsPage;
+export default MyRequestsPage;
