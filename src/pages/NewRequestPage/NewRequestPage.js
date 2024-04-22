@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const NewRequestsPage = () => {
     const [requests, setRequests] = useState([]);
@@ -37,7 +38,19 @@ const NewRequestsPage = () => {
 
     return (
         <div className='container py-4'>
+
+             <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><Link to="/requests">Все заявки</Link></li>
+                    <li class="breadcrumb-item active" aria-current="page">Новые заявки</li>
+                    <li class="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
+                </ol>
+            </nav>
+            
             <h2 className="mb-4">Новые заявки</h2>
+
+           
+            
             <div className="table-responsive">
                 <table className="table table-striped table-bordered">
                     <thead className="bg-primary text-white">

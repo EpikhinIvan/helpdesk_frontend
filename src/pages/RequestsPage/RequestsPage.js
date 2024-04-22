@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const RequestsPage = () => {
     const [requests, setRequests] = useState([]);
@@ -45,7 +45,17 @@ const RequestsPage = () => {
 
     return (
         <div className='container py-4'>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">Все заявки</li>
+                    <li class="breadcrumb-item"><Link to="/newrequests">Новые заявки</Link></li>
+                    <li class="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
+                </ol>
+            </nav>
+
             <h2 className="mb-4">Заявки</h2>
+
             <div className="row mb-3">
                 <div className="col-md-6">
                     <input
