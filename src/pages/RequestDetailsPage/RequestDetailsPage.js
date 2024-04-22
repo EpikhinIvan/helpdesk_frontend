@@ -27,11 +27,22 @@ const RequestDetailsPage = () => {
         );
     }
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const minutes = date.getMinutes();
+        const hours = date.getHours();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${hours}:${minutes} ${day}.${month}.${year}`;
+    };
+
     return (
         <div className='container py-4'>
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Главная</Link></li>
                     <li class="breadcrumb-item"><Link to="/requests">Все заявки</Link></li>
                     <li class="breadcrumb-item"><Link to="/newrequests">Новые заявки</Link></li>
                     <li class="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
@@ -47,7 +58,7 @@ const RequestDetailsPage = () => {
                         <li className="list-group-item"><strong>Преподаватель/Сотрудник:</strong> {request.creator}</li>
                         <li className="list-group-item"><strong>Описание:</strong> {request.description}</li>
                         <li className="list-group-item"><strong>HelpDesk сотрудник:</strong> {request.handler}</li>
-                        <li className="list-group-item"><strong>Создана:</strong> {new Date(request.created_at).toLocaleString()}</li>
+                        <li className="list-group-item"><strong>Создана:</strong> {formatDate(request.created_at)}</li>
                         <li className="list-group-item"><strong>Статус:</strong> {request.status === 'NEW' ? 'Новый' : 
                                     request.status === 'IN_PROCESS' ? 'В процессе' : 
                                     request.status === 'CLOSED' ? 'Закрыт' : 'CLOSED'}</li>

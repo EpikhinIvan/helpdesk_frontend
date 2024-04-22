@@ -43,14 +43,26 @@ const RequestsPage = () => {
         navigate(`/requests/${id}`);
     };
 
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const minutes = date.getMinutes();
+        const hours = date.getHours();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${hours}:${minutes} ${day}.${month}.${year}`;
+    };
+
     return (
         <div className='container py-4'>
 
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">Все заявки</li>
-                    <li class="breadcrumb-item"><Link to="/newrequests">Новые заявки</Link></li>
-                    <li class="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Главная</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Все заявки</li>
+                    <li className="breadcrumb-item"><Link to="/newrequests">Новые заявки</Link></li>
+                    <li className="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
                 </ol>
             </nav>
 
@@ -96,7 +108,7 @@ const RequestsPage = () => {
                                 <td>{request.creator}</td>
                                 <td>{request.description}</td>
                                 <td>{request.handler}</td>
-                                <td>{new Date(request.created_at).toLocaleDateString()}</td>
+                                <td>{formatDate(request.created_at)}</td>
                                 <td>{request.status === 'NEW' ? 'Новый' : 
                                     request.status === 'IN_PROCESS' ? 'В процессе' : 
                                     request.status === 'CLOSED' ? 'Закрыт' : 'CLOSED'}

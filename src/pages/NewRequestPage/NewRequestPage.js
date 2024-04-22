@@ -35,18 +35,29 @@ const NewRequestsPage = () => {
         }
     };
     
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const minutes = date.getMinutes();
+        const hours = date.getHours();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${hours}:${minutes} ${day}.${month}.${year}`;
+    };
+
 
     return (
         <div className='container py-4'>
 
              <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Главная</Link></li>
                     <li class="breadcrumb-item"><Link to="/requests">Все заявки</Link></li>
                     <li class="breadcrumb-item active" aria-current="page">Новые заявки</li>
                     <li class="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
                 </ol>
             </nav>
-            
+
             <h2 className="mb-4">Новые заявки</h2>
 
            
@@ -72,7 +83,7 @@ const NewRequestsPage = () => {
                                         <td>{request.auditorium_number}</td>
                                         <td>{request.creator}</td>
                                         <td>{request.description}</td>
-                                        <td>{new Date(request.created_at).toLocaleDateString()}</td>
+                                        <td>{formatDate(request.created_at)}</td>
                                         <td>
                                             <button onClick={() => handleAcceptRequest(request.id)} className="btn btn-success">Принять</button>
                                         </td>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-
 const MyRequestsPage = () => {
     const [requests, setRequests] = useState([]);
     const helpdeskUsernameFromStorage = localStorage.getItem('helpdeskUsername');
@@ -32,11 +31,24 @@ const MyRequestsPage = () => {
             console.error(err.response.data);
         }
     };
+    
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const minutes = date.getMinutes();
+        const hours = date.getHours();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${hours}:${minutes} ${day}.${month}.${year}`;
+    };
+
 
     return (
         <div className='container py-4'>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/">Главная</Link></li>
                     <li class="breadcrumb-item"><Link to="/requests">Все заявки</Link></li>
                     <li class="breadcrumb-item"><Link to="/newrequests">Новые заявки</Link></li>
                     <li class="breadcrumb-item active" aria-current="page">Мои заявки</li>
@@ -72,7 +84,7 @@ const MyRequestsPage = () => {
                                 <td>{request.auditorium_number}</td>
                                 <td>{request.creator}</td>
                                 <td>{request.handler}</td>
-                                <td>{new Date(request.created_at).toLocaleDateString()}</td>
+                                <td>{formatDate(request.created_at)}</td>
                                 <td>
                                     <button onClick={() => handleAcceptRequest(request.id)} className="btn btn-success">Закрыть</button>
                                 </td>
