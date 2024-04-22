@@ -17,14 +17,27 @@ const NewRequestsPage = () => {
         fetchData();
     }, []); 
 
-    const filteredRequests = requests.filter(request => request.status === 'NEW')
+    const handleAcceptRequest = async (id) => {
+        const helpdeskUsername = localStorage.getItem('helpdeskUsername');
+        const userId = localStorage.getItem('userId');
+
+        try {
+            const res = await axios.patch(`http://localhost:8000/api/helpdesk-requests/${id}/`, { 
+                status: 'IN_PROCESS',
+                handler: userId,
+             });
+
+            setRequests(requests.map(request => (request.id === id ? { ...request, status: 'IN_PROCESS', handler: helpdeskUsername, handler_username: helpdeskUsername } : request)));
+            console.log(res.data);
+        } catch (err) {
+            console.error(err.response.data);
+        }
+    };
+    
 
     return (
         <div className='container py-4'>
             <h2 className="mb-4">Новые заявки</h2>
-            <div className="row mb-3">
-            </div>
-
             <div className="table-responsive">
                 <table className="table table-striped table-bordered">
                     <thead className="bg-primary text-white">
@@ -33,21 +46,31 @@ const NewRequestsPage = () => {
                             <th scope="col">Аудитория</th>
                             <th scope="col">Преподаватель/Сотрудник</th>
                             <th scope="col">Описание</th>
-                            <th scope="col">HelpDesk сотрудник</th>
                             <th scope="col">Создана</th>
+                            <th scope="col">Действия</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredRequests.map((request, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{request.auditorium_number}</td>
-                                <td>{request.creator}</td>
-                                <td>{request.description}</td>
-                                <td>{request.handler}</td>
-                                <td>{request.created_at}</td>
+                        {requests.length > 0 && requests.some(request => request.status === 'NEW') ? (
+                            requests.map((request, index) => (
+                                request.status === 'NEW' && (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{request.auditorium_number}</td>
+                                        <td>{request.creator}</td>
+                                        <td>{request.description}</td>
+                                        <td>{new Date(request.created_at).toLocaleDateString()}</td>
+                                        <td>
+                                            <button onClick={() => handleAcceptRequest(request.id)} className="btn btn-success">Принять</button>
+                                        </td>
+                                    </tr>
+                                )
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" className="text-center">Новых заявок нет</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>

@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const RequestsPage = () => {
     const [requests, setRequests] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const navigate = useNavigate();
+
+    const loadDataFromServer = async () => {
+        try {
+            const res = await axios.get('http://localhost:8000/api/helpdesk-requests/');
+            setRequests(res.data);
+        } catch (err) {
+            console.error(err.response.data);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await axios.get('http://localhost:8000/api/helpdesk-requests/');
-                setRequests(res.data);
-            } catch (err) {
-                console.error(err.response.data);
-            }
-        };
-
-        fetchData();
-    }, []); 
+        loadDataFromServer();
+        const interval = setInterval(loadDataFromServer, 5000); 
+        return () => clearInterval(interval); 
+    }, []);
 
     const filteredRequests = requests.filter(request => {
         return (
@@ -33,6 +37,10 @@ const RequestsPage = () => {
 
     const handleStatusFilterChange = (event) => {
         setStatusFilter(event.target.value);
+    };
+
+    const handleRowClick = (id) => {
+        navigate(`/requests/${id}`);
     };
 
     return (
@@ -65,23 +73,20 @@ const RequestsPage = () => {
                             <th scope="col">Аудитория</th>
                             <th scope="col">Преподаватель/Сотрудник</th>
                             <th scope="col">Описание</th>
-
                             <th scope="col">HelpDesk сотрудник</th>
-
                             <th scope="col">Создана</th>
                             <th scope="col">Статус</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredRequests.map((request, index) => (
-                            <tr key={index}>
+                            <tr key={index} onClick={() => handleRowClick(request.id)}>
                                 <td>{index + 1}</td>
                                 <td>{request.auditorium_number}</td>
                                 <td>{request.creator}</td>
                                 <td>{request.description}</td>
-
                                 <td>{request.handler}</td>
-                                <td>{request.created_at}</td>
+                                <td>{new Date(request.created_at).toLocaleDateString()}</td>
                                 <td>{request.status === 'NEW' ? 'Новый' : 
                                     request.status === 'IN_PROCESS' ? 'В процессе' : 
                                     request.status === 'CLOSED' ? 'Закрыт' : 'CLOSED'}

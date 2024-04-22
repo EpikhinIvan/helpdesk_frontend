@@ -9,10 +9,19 @@ import NewRequestsPage from './pages/NewRequestPage/NewRequestPage';
 
 import MyRequestsPage from './pages/MyRequestsPage/MyRequestsPage';
 
+import RequestDetailsPage from './pages/RequestDetailsPage/RequestDetailsPage';
+
 const ProtectedRoute = ({ children }) => {
   const isHelpDeskUser = localStorage.getItem('isHelpDeskUser') === 'true';
   return isHelpDeskUser ? <Navigate to="/" replace /> : children;
 };
+
+const ProtectedRoute1 = ({ children }) => {
+  const isHelpDeskUser = localStorage.getItem('isHelpDeskUser') === 'false';
+  return isHelpDeskUser ? <Navigate to="/" replace /> : children;
+};
+
+
 
 const App = () => {
   return (
@@ -22,9 +31,12 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/" element={<HomePage />} />
-          <Route path="/requests" element={<RequestsPage/>} />
-          <Route path="/newrequests" element={<NewRequestsPage/>} />
-          <Route path="/my-requests" element={<MyRequestsPage/>} />
+
+          <Route path="/requests" element={<ProtectedRoute1><RequestsPage/></ProtectedRoute1>} />
+          <Route path="/requests/:id" element={<ProtectedRoute1><RequestDetailsPage /></ProtectedRoute1>} />
+          <Route path="/newrequests" element={<ProtectedRoute1><NewRequestsPage/></ProtectedRoute1>} />
+          <Route path="/my-requests" element={<ProtectedRoute1><MyRequestsPage/></ProtectedRoute1>} />
+          
           <Route path="/add-request" element={
             <ProtectedRoute>
               <AddRequestPage/>

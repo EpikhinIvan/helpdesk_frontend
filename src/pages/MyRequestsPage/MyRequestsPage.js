@@ -19,6 +19,19 @@ const MyRequestsPage = () => {
         fetchData();
     }, []); 
 
+    const handleAcceptRequest = async (id) => {
+        try {
+            const res = await axios.patch(`http://localhost:8000/api/helpdesk-requests/${id}/`, { 
+                status: 'CLOSED',
+             });
+
+            setRequests(requests.map(request => (request.id === id ? { ...request, status: 'CLOSED'} : request)));
+            console.log(res.data);
+        } catch (err) {
+            console.error(err.response.data);
+        }
+    };
+
     return (
         <div className='container py-4'>
             <h2 className="mb-4">Мои Заявки</h2>
@@ -32,6 +45,7 @@ const MyRequestsPage = () => {
                             <th scope="col">Преподаватель/Сотрудник</th>
                             <th scope="col">HelpDesk сотрудник</th>
                             <th scope="col">Создана</th>
+                            <th scope="col">Действия</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,11 +61,14 @@ const MyRequestsPage = () => {
                                 <td>{request.auditorium_number}</td>
                                 <td>{request.creator}</td>
                                 <td>{request.handler}</td>
-                                <td>{new Date(request.created_at).toLocaleString()}</td>
+                                <td>{new Date(request.created_at).toLocaleDateString()}</td>
+                                <td>
+                                    <button onClick={() => handleAcceptRequest(request.id)} className="btn btn-success">Закрыть</button>
+                                </td>
                             </tr>
                             ))
                         ) : (
-                            // Сообщение, если заявок нет
+                            
                             <tr>
                             <td colSpan="6" className="text-center">Заявок в процессе обработки нет или они не назначены на вас</td>
                             </tr>
