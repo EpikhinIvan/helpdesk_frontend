@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+import logo from '../RequestsPage/almaulogo.svg'
+
 const NewRequestsPage = () => {
     const [requests, setRequests] = useState([]);
+    const [isAuthenticated] = useState(localStorage.getItem('token') !== null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,59 +50,79 @@ const NewRequestsPage = () => {
 
 
     return (
-        <div className='container py-4'>
+        <div>
+            {isAuthenticated ? (
+            <>
+            <header className="header">
+            </header>
 
-             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li className="breadcrumb-item"><Link to="/">Главная</Link></li>
-                    <li class="breadcrumb-item"><Link to="/requests">Все заявки</Link></li>
-                    <li class="breadcrumb-item active" aria-current="page">Новые заявки</li>
-                    <li class="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
-                </ol>
-            </nav>
+            <div className='container py-4'>
 
-            <h2 className="mb-4">Новые заявки</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <img src={logo} alt="AlmaU Logo" className="logo" />
 
-           
-            
-            <div className="table-responsive">
-                <table className="table table-striped table-bordered">
-                    <thead className="bg-primary text-white">
-                        <tr>
-                            <th scope="col">№</th>
-                            <th scope="col">Аудитория</th>
-                            <th scope="col">Преподаватель/Сотрудник</th>
-                            <th scope="col">Описание</th>
-                            <th scope="col">Создана</th>
-                            <th scope="col">Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {requests.length > 0 && requests.some(request => request.status === 'NEW') ? (
-                            requests.map((request, index) => (
-                                request.status === 'NEW' && (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{request.auditorium_number}</td>
-                                        <td>{request.creator}</td>
-                                        <td>{request.description}</td>
-                                        <td>{formatDate(request.created_at)}</td>
-                                        <td>
-                                            <button onClick={() => handleAcceptRequest(request.id)} className="btn btn-success">Принять</button>
-                                        </td>
-                                    </tr>
-                                )
-                            ))
-                        ) : (
+                        <li className="breadcrumb-item"><Link to="/">Главная</Link></li>
+                        <li class="breadcrumb-item"><Link to="/requests">Все заявки</Link></li>
+                        <li class="breadcrumb-item active" aria-current="page">Новые заявки</li>
+                        <li class="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
+                    </ol>
+                </nav>
+
+                <h2 className="mb-4">Новые заявки</h2>
+
+                
+                
+                <div className="table-responsive">
+                    <table className="table table-striped table-bordered">
+                        <thead className="bg-primary text-white">
                             <tr>
-                                <td colSpan="6" className="text-center">Новых заявок нет</td>
+                                <th scope="col">№</th>
+                                <th scope="col">Аудитория</th>
+                                <th scope="col">Преподаватель/Сотрудник</th>
+                                <th scope="col">Описание</th>
+                                <th scope="col">Создана</th>
+                                <th scope="col">Действия</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {requests.length > 0 && requests.some(request => request.status === 'NEW') ? (
+                                requests.map((request, index) => (
+                                    request.status === 'NEW' && (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{request.auditorium_number}</td>
+                                            <td>{request.creator}</td>
+                                            <td>{request.description}</td>
+                                            <td>{formatDate(request.created_at)}</td>
+                                            <td>
+                                                <button onClick={() => handleAcceptRequest(request.id)} className="btn btn-success">Принять</button>
+                                            </td>
+                                        </tr>
+                                    )
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="6" className="text-center">Новых заявок нет</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            </>) : (
+             <>
+             <div className="d-flex justify-content-center align-items-center vh-100" >
+                 <div>
+                     <p>Вы не зарегистрированы. Пожалуйста, <Link to="/register">зарегистрируйтесь</Link>.</p>
+                     <p>Или <Link to="/login">войдите</Link>, используя свой логин и пароль.</p>
+                 </div>
+              </div>
+              </>
+          )}
         </div>
-    );
-};
+        );
+    };
+
 
 export default NewRequestsPage;
