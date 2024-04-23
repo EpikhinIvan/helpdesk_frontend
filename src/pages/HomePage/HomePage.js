@@ -33,6 +33,7 @@
                             <li className="breadcrumb-item active" aria-current="page">Главная</li>
                             <li class="breadcrumb-item"><Link to="/requests">Все заявки</Link></li>
                             <li class="breadcrumb-item"><Link to="/newrequests">Новые заявки</Link></li>
+                            <li class="breadcrumb-item"><Link to="/my-requests">Мои заявки</Link></li>
                             
                         </ol>
                     </nav>
