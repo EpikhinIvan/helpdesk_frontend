@@ -1,16 +1,19 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import QRCode from "qrcode.react"; 
 import QRCodeGenerator from "qrcode";
 import './auditorium-list-page.css'
+const apiUrl = process.env.REACT_APP_API_URL;
 
 function AuditoriumListPage() {
     const [auditoriums, setAuditoriums] = useState([]);
+    console.log(auditoriums);
 
     useEffect(() => {
         const fetchAuditoriums = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/auditoriums/');
+                const response = await fetch(`${apiUrl}/api/auditoriums/`);
                 if (!response.ok) {
                     throw new Error('Ошибка загрузки данных об аудиториях');
                 }
@@ -26,7 +29,7 @@ function AuditoriumListPage() {
 
     const handleDownloadQR = async (auditorium) => {
         const canvas = document.createElement("canvas");
-        const url = `http://${window.location.host}/add-request?auditoriumNumber=${auditorium.id}`;
+        const url = `http://${window.location.host}/add-request?auditoriumInfo=${auditorium.id}-${auditorium.number}`;
         await QRCodeGenerator.toCanvas(canvas, url, { width: 200 });
         const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         let downloadLink = document.createElement("a");
@@ -47,12 +50,12 @@ function AuditoriumListPage() {
                             <div className="card-body">
                                 <h3 className="card-title">Аудитория №{auditorium.number}</h3>
                                 <div className="mb-3">
-                                    <QRCode value={`http://${window.location.host}/add-request?auditoriumNumber=${auditorium.id}`} />
+                                    <QRCode value={`http://${window.location.host}/add-request?auditoriumInfo=${auditorium.id}-${auditorium.number}`} />
                                 </div>
                                 <button onClick={() => handleDownloadQR(auditorium)} className="btn btn-secondary">
                                     Скачать QR
                                 </button>
-                                <Link to={`/add-request?auditoriumNumber=${auditorium.id}`} className="btn btn-primary">
+                                <Link to={`/add-request?auditoriumInfo=${auditorium.id}-${auditorium.number}`} className="btn btn-primary">
                                     Добавить заявку
                                 </Link>
                             </div>

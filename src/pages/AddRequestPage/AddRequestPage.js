@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import InputMask from "react-input-mask";
 import './add-request-page.css'
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 function AddRequestPage() {
   const [searchParams] = useSearchParams();
-  const auditoriumNumber = searchParams.get("auditoriumNumber");
+  const auditoriumInfo = searchParams.get("auditoriumInfo");
+  const [auditoriumId, auditoriumNumber] = auditoriumInfo.split("-");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [description, setDescription] = useState("");
   const [creator, setCreator] = useState("");
@@ -16,14 +19,14 @@ function AddRequestPage() {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:8000/api/helpdesk-requests/",
+        `${apiUrl}/api/helpdesk-requests/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            auditorium_number: auditoriumNumber,
+            auditorium_number: auditoriumId,
             description: description,
             creator: creator,
             phone_number: phoneNumber,
@@ -59,7 +62,7 @@ function AddRequestPage() {
       {success && <div className="alert alert-success">Заявка успешно создана! Ожидайте специалиста</div>}
       <form onSubmit={handleSubmit} className="needs-validation add-request-form" noValidate>
       <h2 className="text-center">Создание заявки</h2>
-      <h6 className="text-center">Аудитория №{auditoriumNumber}</h6>
+      <h6 className="text-center">Аудитория № {auditoriumNumber}</h6>
         <div className="mb-3">
           <label htmlFor="creator" className="form-label">Имя</label>
           <input
